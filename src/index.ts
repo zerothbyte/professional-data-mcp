@@ -18,6 +18,7 @@ import { worldBankToolDefs, handleWorldBank } from "./tools/world-bank.js";
 import { openAlexToolDefs, handleOpenAlex } from "./tools/openalex.js";
 import { semanticScholarToolDefs, handleSemanticScholar } from "./tools/semantic-scholar.js";
 import { crossrefToolDefs, handleCrossref } from "./tools/crossref.js";
+import { utilityToolDefs, handleUtilities } from "./tools/utilities.js";
 
 // ── All tools registry ───────────────────────────────────────────────────────
 
@@ -27,6 +28,7 @@ const ALL_TOOLS = [
   ...openAlexToolDefs,
   ...semanticScholarToolDefs,
   ...crossrefToolDefs,
+  ...utilityToolDefs,
 ];
 
 // Tool name → handler routing
@@ -36,6 +38,7 @@ async function routeTool(toolName: string, args: Record<string, any>): Promise<s
   if (toolName.startsWith("academic_")) return handleOpenAlex(toolName, args);
   if (toolName.startsWith("scholar_")) return handleSemanticScholar(toolName, args);
   if (toolName.startsWith("crossref_")) return handleCrossref(toolName, args);
+  if (toolName.startsWith("utilities_")) return handleUtilities(toolName, args);
   throw new Error(`Unknown tool: ${toolName}`);
 }
 

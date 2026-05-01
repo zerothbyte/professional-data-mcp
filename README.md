@@ -130,6 +130,17 @@ Edit `claude_desktop_config.json`:
 
 ---
 
+### 🛠 Utilities (System Awareness)
+
+| Tool | Description |
+|------|-------------|
+| `utilities_get_current_time` | Get current date, time, and timezone |
+
+**Example prompt:**
+> "What time is it now in Jakarta and what day was it 3 days ago?"
+
+---
+
 ## 🛠 Development
 
 ```bash
