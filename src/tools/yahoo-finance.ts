@@ -1,8 +1,8 @@
 import { httpGet } from "../utils/http.js";
 
-const YF_BASE = "https://query1.finance.yahoo.com/v8/finance";
-const YF_SEARCH = "https://query1.finance.yahoo.com/v1/finance/search";
-const YF_CHART = "https://query1.finance.yahoo.com/v8/finance/chart";
+const YF_BASE = "https://query2.finance.yahoo.com/v8/finance";
+const YF_SEARCH = "https://query2.finance.yahoo.com/v1/finance/search";
+const YF_CHART = "https://query2.finance.yahoo.com/v8/finance/chart";
 
 // ── Tool Definitions ────────────────────────────────────────────────────────
 
