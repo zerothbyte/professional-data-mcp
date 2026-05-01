@@ -237,13 +237,9 @@ async function updateCategories(): Promise<Record<string, string>> {
   try {
     const html = await rateLimitedFetch("https://arxiv.org/category_taxonomy");
     
-    // Simple regex to extract <dt>code</dt><span> (name)</span>
-    // Note: arXiv HTML structure varies, but usually:
-    // <h4>Computer Science (cs)</h4>
-    // <div class="columns ...">
-    // <dt>cs.AI</dt> <dd><span>Artificial Intelligence</span> ...
-    
-    const matches = html.matchAll(/<dt>([^<]+)<\/dt>\s*<dd>\s*<span>([^<]+)<\/span>/g);
+    // Corrected regex based on actual HTML structure:
+    // <h4>cs.AI <span>(Artificial Intelligence)</span></h4>
+    const matches = html.matchAll(/<h4>([a-z.-]+)\s*<span>\(([^)]+)\)<\/span><\/h4>/g);
     const newCache: Record<string, string> = {};
     
     for (const match of matches) {
