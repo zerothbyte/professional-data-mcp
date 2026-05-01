@@ -135,11 +135,18 @@ async function lookupDoi(doi: string): Promise<string> {
   );
 }
 
-async function searchWorks(args: Record<string, any>): Promise<string> {
+  // Map intuitive sort names to Crossref specific fields
+  const sortMapping: Record<string, string> = {
+    "cited_by_count": "is-referenced-by-count",
+    "is-referenced-by-count": "is-referenced-by-count",
+    "score": "score",
+    "published": "published"
+  };
+
   const params: Record<string, any> = {
     query: args.query,
     rows: Math.min(args.limit ?? 5, 100),
-    sort: args.sort ?? "score",
+    sort: sortMapping[args.sort] ?? "score",
     order: "desc",
     select:
       "DOI,title,author,container-title,published,type,is-referenced-by-count,ISSN,publisher",

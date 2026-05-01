@@ -245,7 +245,7 @@ async function searchInstitutions(query: string, limit: number): Promise<string>
 
 async function getTopicSummary(topic: string, limit: number): Promise<string> {
   const data = await httpGet<any>(`${OA_BASE}/works`, {
-    filter: `concepts.display_name.search:${topic}`,
+    search: topic,
     sort: "cited_by_count:desc",
     per_page: limit,
     mailto: "mcp@example.com",
