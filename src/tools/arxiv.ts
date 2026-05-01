@@ -91,6 +91,14 @@ DATE FILTERING: Filter papers by submission date using date_from and/or date_to 
       },
     },
   },
+  {
+    name: "arxiv_update_categories",
+    description: "Update the stored category taxonomy by fetching the latest version from arxiv.org. Use this if you suspect new categories have been added.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+    },
+  },
 ];
 
 // ── Handlers ────────────────────────────────────────────────────────────────
@@ -108,6 +116,9 @@ export async function handleArxiv(
       return getFullPaperText(args.paper_id);
     case "arxiv_list_categories":
       return JSON.stringify(listCategories(args.primary_category), null, 2);
+    case "arxiv_update_categories":
+      const updated = await updateCategories();
+      return `✅ Taxonomy updated successfully. Total categories: ${Object.keys(updated).length}\n\n${JSON.stringify(updated, null, 2)}`;
     default:
       throw new Error(`Unknown arXiv tool: ${toolName}`);
   }
@@ -207,26 +218,55 @@ async function getFullPaperText(paperId: string): Promise<string> {
   }
 }
 
-function listCategories(primaryFilter?: string) {
-  const categories: Record<string, string> = {
-    "cs.AI": "Artificial Intelligence",
-    "cs.CL": "Computation and Language (NLP)",
-    "cs.CV": "Computer Vision",
-    "cs.LG": "Machine Learning",
-    "cs.RO": "Robotics",
-    "cs.NE": "Neural and Evolutionary Computing",
-    "math.ST": "Statistics Theory",
-    "stat.ML": "Machine Learning (Stats)",
-    "physics.gen-ph": "General Physics",
-    "quant-ph": "Quantum Physics",
-    "econ.GN": "General Economics",
-    "q-bio.NC": "Neurons and Cognition",
-  };
+let categoryCache: Record<string, string> = {
+  "cs.AI": "Artificial Intelligence",
+  "cs.CL": "Computation and Language (NLP)",
+  "cs.CV": "Computer Vision",
+  "cs.LG": "Machine Learning",
+  "cs.RO": "Robotics",
+  "cs.NE": "Neural and Evolutionary Computing",
+  "math.ST": "Statistics Theory",
+  "stat.ML": "Machine Learning (Stats)",
+  "physics.gen-ph": "General Physics",
+  "quant-ph": "Quantum Physics",
+  "econ.GN": "General Economics",
+  "q-bio.NC": "Neurons and Cognition",
+};
 
+async function updateCategories(): Promise<Record<string, string>> {
+  try {
+    const html = await rateLimitedFetch("https://arxiv.org/category_taxonomy");
+    
+    // Simple regex to extract <dt>code</dt><span> (name)</span>
+    // Note: arXiv HTML structure varies, but usually:
+    // <h4>Computer Science (cs)</h4>
+    // <div class="columns ...">
+    // <dt>cs.AI</dt> <dd><span>Artificial Intelligence</span> ...
+    
+    const matches = html.matchAll(/<dt>([^<]+)<\/dt>\s*<dd>\s*<span>([^<]+)<\/span>/g);
+    const newCache: Record<string, string> = {};
+    
+    for (const match of matches) {
+      const code = match[1].trim();
+      const name = match[2].trim();
+      newCache[code] = name;
+    }
+
+    if (Object.keys(newCache).length > 0) {
+      categoryCache = newCache;
+      return categoryCache;
+    }
+    throw new Error("No categories found in the HTML response.");
+  } catch (err: any) {
+    throw new Error(`Failed to update taxonomy: ${err.message}`);
+  }
+}
+
+function listCategories(primaryFilter?: string) {
   if (primaryFilter) {
     return Object.fromEntries(
-      Object.entries(categories).filter(([id]) => id.startsWith(primaryFilter))
+      Object.entries(categoryCache).filter(([id]) => id.startsWith(primaryFilter))
     );
   }
-  return categories;
+  return categoryCache;
 }
