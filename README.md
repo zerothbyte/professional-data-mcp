@@ -37,7 +37,7 @@ npm start
 
 ### 1. Cursor / Llama.cpp (Modern)
 Add the MCP server with the following URL:
-`https://YOUR-URL.railway.app/mcp`
+`https://YOUR-URL.railway.app/mcp?apiKey=123`
 
 ### 2. Claude Desktop (Legacy)
 Edit `claude_desktop_config.json`:
@@ -46,7 +46,7 @@ Edit `claude_desktop_config.json`:
   "mcpServers": {
     "professional-data": {
       "command": "curl",
-      "args": ["-s", "https://YOUR-URL.railway.app/sse"]
+      "args": ["-s", "https://YOUR-URL.railway.app/sse?apiKey=123"]
     }
   }
 }
