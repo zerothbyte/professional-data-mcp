@@ -126,7 +126,7 @@ async function searchWorks(args: Record<string, any>): Promise<string> {
   const params: Record<string, any> = {
     search: args.query,
     per_page: Math.min(args.limit ?? 5, 25),
-    sort: args.sort ?? "relevance_score",
+    sort: args.sort === "relevance_score" || !args.sort ? "relevance_score:desc" : args.sort,
     mailto: "mcp@example.com",
   };
 
