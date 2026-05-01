@@ -135,6 +135,7 @@ async function lookupDoi(doi: string): Promise<string> {
   );
 }
 
+async function searchWorks(args: Record<string, any>): Promise<string> {
   // Map intuitive sort names to Crossref specific fields
   const sortMapping: Record<string, string> = {
     "cited_by_count": "is-referenced-by-count",
