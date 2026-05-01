@@ -130,6 +130,19 @@ Edit `claude_desktop_config.json`:
 
 ---
 
+### 📚 arXiv (Latest Research)
+
+| Tool | Description |
+|------|-------------|
+| `arxiv_search_papers` | Search latest research papers by keyword or category |
+| `arxiv_get_paper` | Get full details and PDF link for a specific arXiv ID |
+| `arxiv_list_categories` | Browse arXiv subject categories (AI, Physics, etc.) |
+
+**Example prompt:**
+> "Search arXiv for latest papers on LLM quantization in the cs.AI category"
+
+---
+
 ### 🛠 Utilities (System Awareness)
 
 | Tool | Description |

@@ -17,6 +17,7 @@
     "axios": "^1.15.2",
     "cors": "^2.8.5",
     "express": "^5.0.1",
+    "fast-xml-parser": "^5.7.2",
     "yahoo-finance2": "^3.14.0"
   },
   "devDependencies": {

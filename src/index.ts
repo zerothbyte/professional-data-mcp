@@ -19,6 +19,7 @@ import { openAlexToolDefs, handleOpenAlex } from "./tools/openalex.js";
 import { semanticScholarToolDefs, handleSemanticScholar } from "./tools/semantic-scholar.js";
 import { crossrefToolDefs, handleCrossref } from "./tools/crossref.js";
 import { utilityToolDefs, handleUtilities } from "./tools/utilities.js";
+import { arxivToolDefs, handleArxiv } from "./tools/arxiv.js";
 
 // ── All tools registry ───────────────────────────────────────────────────────
 
@@ -29,6 +30,7 @@ const ALL_TOOLS = [
   ...semanticScholarToolDefs,
   ...crossrefToolDefs,
   ...utilityToolDefs,
+  ...arxivToolDefs,
 ];
 
 // Tool name → handler routing
@@ -39,6 +41,7 @@ async function routeTool(toolName: string, args: Record<string, any>): Promise<s
   if (toolName.startsWith("scholar_")) return handleSemanticScholar(toolName, args);
   if (toolName.startsWith("crossref_")) return handleCrossref(toolName, args);
   if (toolName.startsWith("utilities_")) return handleUtilities(toolName, args);
+  if (toolName.startsWith("arxiv_")) return handleArxiv(toolName, args);
   throw new Error(`Unknown tool: ${toolName}`);
 }
 
