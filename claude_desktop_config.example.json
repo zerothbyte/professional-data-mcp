@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "professional-data": {
+      "command": "node",
+      "args": ["/GANTI/DENGAN/PATH/ABSOLUT/professional-data-mcp/dist/index.js"]
+    }
+  }
+}
