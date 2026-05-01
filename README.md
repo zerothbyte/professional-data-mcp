@@ -1,195 +1,99 @@
-# 📊 Professional Data MCP Server
+# Professional Data MCP Server
 
-MCP Server to retrieve professional data — similar to the **Kimi Professional Data** feature.
+A professional-grade Model Context Protocol (MCP) server that provides AI assistants with real-time access to financial, academic, and global development data. 
 
-## 🗂 Data Sources
-
-| Source | Tools | Description |
-|--------|-------|-------------|
-| **Yahoo Finance** | 4 tools | Real-time stock prices, historical data, financial reports |
-| **World Bank** | 3 tools | GDP, population, inflation, employment, etc. |
-| **OpenAlex** | 5 tools | Journals, papers, authors, institutions (200M+ works) |
-| **Semantic Scholar** | 5 tools | Papers + AI TL;DR summary, citations |
-| **Crossref** | 4 tools | DOI metadata, journals, bibliography |
-
-**Total: 21 tools ready to use — no API key required!**
+Built with **Express.js** and **TypeScript**, supporting both **SSE** (legacy clients like Claude Desktop) and **Streamable HTTP** (modern clients like Cursor and Llama.cpp).
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Features & Tools
 
-### Option 1: Hosting on Railway (Recommended)
-1. Push this repo to GitHub.
-2. Connect it to **Railway**.
-3. Railway will automatically build and run the server.
-4. You will get a URL like `https://pro-data-mcp.up.railway.app`.
+### 📈 Financial Data (Yahoo Finance)
+| Tool | Description |
+|------|-------------|
+| `finance_get_quote` | Real-time stock/ETF/index quotes (Price, Change, PE, etc.) |
+| `finance_search` | Search for ticker symbols by company name |
+| `finance_get_historical` | Historical price data (OHLCV) for trend analysis |
+| `finance_get_financials` | Key financial metrics (Revenue, Debt, ROE, EBIDTA) |
 
-### Option 2: Run Locally
-```bash
-npm install
-npm run build
-npm start
+### 📚 arXiv (Advanced Research)
+| Tool | Description |
+|------|-------------|
+| `arxiv_search_papers` | Advanced search with field prefixes (`ti:`, `au:`, `cat:`) and date filtering |
+| `arxiv_get_paper_data` | Full bibliographic metadata for a specific arXiv ID |
+| `arxiv_get_full_paper_text` | **Experimental**: Downloads and extracts text content from PDF papers |
+| `arxiv_list_categories` | Browse research categories (AI, Machine Learning, etc.) |
+| `arxiv_update_categories` | Scrapes the latest taxonomy directly from arXiv.org |
+
+### 🎓 Academic & Scientific Data
+| Tool | Description |
+|------|-------------|
+| `academic_search_works` | Search millions of papers via **OpenAlex** |
+| `academic_get_topic_summary` | Get key research insights for a specific topic |
+| `scholar_search_papers` | Search **Semantic Scholar** with AI-generated TL;DR summaries |
+| `crossref_search_works` | Search and filter academic works via **Crossref** metadata |
+
+### 🌍 Global Development (World Bank)
+| Tool | Description |
+|------|-------------|
+| `worldbank_get_indicator` | Fetch global development indicators (GDP, Inflation, etc.) |
+| `worldbank_search_indicators` | Find specific data points within the World Bank database |
+
+### 🛠 Utilities
+| Tool | Description |
+|------|-------------|
+| `utilities_get_current_time` | Get real-time system date/time (Essential for AI time-awareness) |
+
+---
+
+## 🛠 Installation & Setup
+
+### Local Development
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Build and Start:
+   ```bash
+   npm run build
+   npm start
+   ```
+The server will listen on `http://localhost:3000`.
+
+---
+
+## 🔌 Connection Guide
+
+### 1. Cursor / Llama.cpp (Streamable HTTP)
+Use the following endpoint URL. **Note**: Cursor requires a dummy query parameter.
+```text
+http://localhost:3000/mcp?apiKey=123
 ```
 
----
-
-## 🔗 Connecting to AI
-
-### 1. Cursor / Llama.cpp (Modern)
-Add the MCP server with the following URL:
-`https://YOUR-URL.railway.app/mcp?apiKey=123`
-
-### 2. Claude Desktop (Legacy)
-Edit `claude_desktop_config.json`:
+### 2. Claude Desktop (SSE)
+Add this to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
     "professional-data": {
-      "command": "curl",
-      "args": ["-s", "https://YOUR-URL.railway.app/sse?apiKey=123"]
+      "url": "http://localhost:3000/sse"
     }
   }
 }
 ```
-> **Note**: For Claude Desktop via Remote SSE, ensure you use a command that supports SSE streams (like `curl` or a specific adapter).
 
 ---
 
-## 📋 Tool List
+## ☁️ Deployment
 
-### 💹 Yahoo Finance
-
-| Tool | Description |
-|------|-------------|
-| `finance_get_quote` | Real-time price: AAPL, BTC-USD, etc. |
-| `finance_search` | Search for stocks/ETF/crypto symbols |
-| `finance_get_historical` | Daily/weekly/monthly OHLCV data |
-| `finance_get_financials` | Revenue, EBITDA, ROE, debt ratio |
-
-**Example prompt:**
-> "What is the price of AAPL right now and its performance for the last 3 months?"
+### Railway.app
+This project is ready for one-click deployment on Railway. 
+1. Connect your GitHub repository to Railway.
+2. The `Procfile` and `Dockerfile` are already configured.
+3. Ensure the `PORT` environment variable is set to `3000`.
 
 ---
 
-### 🌍 World Bank
-
-| Tool | Description |
-|------|-------------|
-| `worldbank_get_indicator` | GDP, inflation, unemployment, etc. per country |
-| `worldbank_country_profile` | Complete economic profile of a country |
-| `worldbank_search_countries` | List of all countries + codes |
-
-**Example prompt:**
-> "Compare GDP per capita of Indonesia vs Vietnam from 2015-2023"
-
-**Available Indicators:** gdp, gdp_per_capita, gdp_growth, population, inflation, unemployment, poverty_rate, literacy_rate, life_expectancy, exports, imports, fdi, gini, co2_emissions, internet_users
-
----
-
-### 📚 OpenAlex (Academic Data)
-
-| Tool | Description |
-|------|-------------|
-| `academic_search_works` | Search academic papers by keyword |
-| `academic_get_paper` | Paper details by DOI/OpenAlex ID |
-| `academic_search_authors` | Search researchers + h-index |
-| `academic_search_institutions` | Search universities/research institutions |
-| `academic_get_topic_summary` | Top papers based on topic |
-
-**Example prompt:**
-> "Find the latest 5 papers on large language models from 2024, that are open access"
-
----
-
-### 🎓 Semantic Scholar
-
-| Tool | Description |
-|------|-------------|
-| `scholar_search_papers` | Search papers + AI TL;DR summary |
-| `scholar_get_paper` | Full details + abstract + summary |
-| `scholar_get_paper_citations` | Papers citing this paper |
-| `scholar_get_paper_references` | List of references/bibliography |
-| `scholar_search_authors` | Search researchers + h-index |
-
-**Example prompt:**
-> "Find papers about RAG (Retrieval Augmented Generation), show the TL;DR"
-
----
-
-### 📖 Crossref
-
-| Tool | Description |
-|------|-------------|
-| `crossref_lookup_doi` | Complete metadata from DOI |
-| `crossref_search_works` | Search academic works |
-| `crossref_search_journals` | Search scientific journals |
-| `crossref_get_journal_articles` | Latest articles from a journal (by ISSN) |
-
-**Example prompt:**
-> "Lookup DOI 10.1038/nature12373 and show its full information"
-
----
-
-### 📚 arXiv (Latest Research)
-
-| Tool | Description |
-|------|-------------|
-| `arxiv_search_papers` | Search latest research papers by keyword or category |
-| `arxiv_get_paper` | Get full details and PDF link for a specific arXiv ID |
-| `arxiv_list_categories` | Browse arXiv subject categories (AI, Physics, etc.) |
-
-**Example prompt:**
-> "Search arXiv for latest papers on LLM quantization in the cs.AI category"
-
----
-
-### 🛠 Utilities (System Awareness)
-
-| Tool | Description |
-|------|-------------|
-| `utilities_get_current_time` | Get current date, time, and timezone |
-
-**Example prompt:**
-> "What time is it now in Jakarta and what day was it 3 days ago?"
-
----
-
-## 🛠 Development
-
-```bash
-# Run directly (without build)
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production build
-npm start
-```
-
-## 📁 Project Structure
-
-```
-professional-data-mcp/
-├── src/
-│   ├── index.ts              ← Main MCP server
-│   ├── tools/
-│   │   ├── yahoo-finance.ts  ← Finance tools
-│   │   ├── world-bank.ts     ← Economic data
-│   │   ├── openalex.ts       ← Academic search
-│   │   ├── semantic-scholar.ts ← Paper + AI summary
-│   │   └── crossref.ts       ← DOI & journal metadata
-│   └── utils/
-│       └── http.ts           ← HTTP helper
-├── dist/                     ← Compiled JS (after npm run build)
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-## ⚡ Usage Tips
-
-- **Stock Symbols**: Use suffixes if needed — e.g., `AAPL`, `BTC-USD`
-- **Indices**: `^GSPC` (S&P 500), `^IXIC` (Nasdaq)
-- **Country Codes**: `ID` = Indonesia, `US` = USA, `CN` = China
-- **DOI Prefix**: Can use `10.xxx/xxx` directly, without `https://doi.org/`
+## 📝 License
+Distributed under the **MIT License**. See `LICENSE` for more information.
