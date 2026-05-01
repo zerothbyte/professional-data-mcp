@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+// @ts-ignore
 import pdf from "pdf-parse/lib/pdf-parse.js";
 
 const ARXIV_API = "https://export.arxiv.org/api/query";
