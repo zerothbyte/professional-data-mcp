@@ -11,7 +11,7 @@ export const semanticScholarToolDefs = [
   {
     name: "scholar_search_papers",
     description:
-      "Search academic papers on Semantic Scholar. Returns title, abstract, TL;DR AI summary, citation count, authors, and open-access PDF links.",
+      "Search academic papers on Semantic Scholar. Returns title, abstract, TL;DR, authors, and PDF links. NOTE: This API has strict rate limits; use sparingly and avoid repeating the same query.",
     inputSchema: {
       type: "object",
       properties: {
@@ -38,7 +38,7 @@ export const semanticScholarToolDefs = [
   {
     name: "scholar_get_paper",
     description:
-      "Get full details of a paper by Semantic Scholar ID, DOI, or arXiv ID. Includes TL;DR AI summary, full abstract, references, and citations.",
+      "Get full details of a paper. NOTE: This API has strict rate limits; use only for specific, high-priority papers.",
     inputSchema: {
       type: "object",
       properties: {
