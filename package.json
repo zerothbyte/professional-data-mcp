@@ -2,6 +2,9 @@
   "name": "professional-data-mcp",
   "version": "1.0.0",
   "description": "MCP Server for Professional Data (Yahoo Finance, World Bank, Academic Search)",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
